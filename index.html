@@ -1,1 +1,272 @@
-<h1> Hello there</h1>
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La mulți ANI! 😘</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 800%;
+            height: 400%;
+            background-image: url('docs/assets/all.png');
+            opacity: 0.5;
+            background-repeat: repeat;
+            background-size: 350px auto;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .center-component {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border-radius: 0;
+            border: 3px solid green;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border: 2px solid black;
+            width: 80%;
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .close {
+            color: black;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: red;
+        }
+
+        .roulette-container {
+            margin: 100px;
+            position: relative;
+            width: 200px;
+            /* reduce size */
+            height: 200px;
+            /* reduce size */
+            margin: auto;
+        }
+
+        .roulette-wheel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid #000;
+        }
+
+        .roulette-image {
+            position: absolute;
+            width: 30%;
+            height: 40%;
+            transform-origin: center center;
+            border-radius: 50%;
+        }
+
+        #rouletteImage0 {
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #rouletteImage1 {
+            top: 20%;
+            left: 90%;
+            transform: translate(-50%, -50%);
+        }
+
+        #rouletteImage2 {
+            top: 67%;
+            left: 95%;
+            transform: translate(-50%, -50%);
+        }
+
+        #rouletteImage3 {
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #rouletteImage4 {
+            top: 67%;
+            left: 0%;
+            transform: translate(-50%, -50%);
+        }
+
+        #rouletteImage5 {
+            top: 20%;
+            left: 10%;
+            transform: translate(-50%, -50%);
+        }
+
+        .arrow {
+            position: absolute;
+            top: 0%;
+            left: 50%;
+            width: 5px;
+            height: 100px;
+            background-color: red;
+            transform-origin: bottom center;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background"></div>
+
+    <div class="center-component">
+        <img src="docs/assets/atentiune.png" style="height: 100px; width: 100;">
+        <p style="color: red;">A nu se lua niciodată în serios tot ce spun!</p>
+        <button id="playMinigameBtn">Joacă Jocul "Ce Ștefi sunt Azi?"</button>
+    </div>
+
+    <!-- Modal -->
+    <div id="minigameModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModalBtn">&times;</span>
+            <h2 style="margin-bottom: 100px;">CE ȘTEFAN EȘTI ASTĂZI?</h2>
+            <div class="roulette-container">
+                <div class="roulette-wheel" id="rouletteWheel">
+                    <img src="docs/assets/1.png" id="rouletteImage0" class="roulette-image">
+                    <img src="docs/assets/2.png" id="rouletteImage1" class="roulette-image">
+                    <img src="docs/assets/3.png" id="rouletteImage2" class="roulette-image">
+                    <img src="docs/assets/4.png" id="rouletteImage3" class="roulette-image">
+                    <img src="docs/assets/5.png" id="rouletteImage4" class="roulette-image">
+                    <img src="docs/assets/6.png" id="rouletteImage5" class="roulette-image">
+                    <div class="arrow" id="arrow"></div>
+                </div>
+            </div>
+            <button id="startRouletteBtn" style="margin-top: 100px;">Start</button>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const images = [
+            { src: "docs/assets/1.png", description: "Ștefi Mizerupistul: Ți se rupe de griji." },
+            { src: "docs/assets/2.png", description: "Ștefi Poznașul: Ești prea bine dispus pentru astăzi." },
+            { src: "docs/assets/3.png", description: "Ștefi Ranga: Ai băut până n-ai mai putut!" },
+            { src: "docs/assets/4.png", description: "Conf. Univ. Dr. Ștefi: Le spui fetelor să nu mai poarte fuste mini." },
+            { src: "docs/assets/5.png", description: "Viziunea Ștefan: Te-ai concentrat la tot, mai puțin la viață." },
+            { src: "docs/assets/6.png", description: "CHAD Ștefi. În seara asta FUȚI, trebuie doar să ieși din casă." },
+        ];
+
+        document.getElementById('playMinigameBtn').addEventListener('click', function () {
+            document.getElementById('minigameModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', function () {
+            document.getElementById('minigameModal').style.display = 'none';
+        });
+
+        window.addEventListener('click', function (event) {
+            var modal = document.getElementById('minigameModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        const arrow = document.getElementById('arrow');
+        const resultDiv = document.getElementById('result');
+        let spinning = false;
+
+        document.getElementById('startRouletteBtn').addEventListener('click', function () {
+            if (spinning) return;
+
+            spinning = true;
+            resultDiv.innerHTML = "";
+
+            arrow.style.transition = 'none';
+            arrow.style.transform = 'rotate(0deg)';
+
+            setTimeout(() => {
+                const randomDegrees = 360 * 5 + Math.floor(Math.random() * 360);
+                arrow.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
+                arrow.style.transform = `rotate(${randomDegrees}deg)`;
+
+                setTimeout(() => {
+                    const finalDegrees = (randomDegrees % 360);
+                    console.log(finalDegrees)
+                    let segment = Math.round(finalDegrees / ((360 / images.length)));
+                    if (segment === 6) {
+                        segment = 6;
+                    }
+                    resultDiv.innerHTML = images[segment].description;
+                    spinning = false;
+                }, 4000);
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
